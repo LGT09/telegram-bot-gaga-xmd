@@ -1,5 +1,5 @@
 global.prefix = '/'; // Set Your Preferred Prefix
-global.botName = 'GAGA-MD; // Bot Name
+global.botName = 'GAGA-MD' // Bot Name
 global.botVersion = '1.0.0';
 global.botPic = 'https://files.catbox.moe/hvljlp.jpg'; // Can use path, can also use link
 global.botToken = '8456978693:AAGwEnVcdzqwzVOR5wAohRXBy7_iz9m8JxU'; // Replace With Your Bot Token (Get it from BotFather)
