@@ -1,7 +1,7 @@
 const axios = require('axios');
 const ytdl = require('ytdl-core');
-const { getConfig} = require('../utils/config');
 const { getContextInfo} = require('../utils/context');
+const { getConfig} = require('../utils/config');
 
 module.exports = {
   execute: async (sock, msg, args) => {
@@ -11,7 +11,7 @@ module.exports = {
 
     if (!query) {
       return sock.sendMessage(msg.key.remoteJid, {
-        text: '❗ Please provide a video name or topic.',
+        text: '❗ Please provide a song name.',
         contextInfo: getContextInfo(sender, config)
 });
 }
@@ -26,16 +26,31 @@ module.exports = {
       const info = await ytdl.getInfo(videoUrl);
       const title = info.videoDetails.title;
 
-      const stream = ytdl(videoUrl, { quality: 'highestvideo'});
+      const audioStream = ytdl(videoUrl, {
+        filter: 'audioonly',
+        quality: 'highestaudio'
+});
+
+      const videoStream = ytdl(videoUrl, {
+        quality: 'highestvideo'
+});
 
       await sock.sendMessage(msg.key.remoteJid, {
-        video: { stream},
-        caption: `🎬 *${title}*`,
+        audio: { stream: audioStream},
+        mimetype: 'audio/mp4',
+        ptt: false,
         contextInfo: getContextInfo(sender, config)
 });
+
+      await sock.sendMessage(msg.key.remoteJid, {
+        video: { stream: videoStream},
+        caption: `🎬 Video version of *${title}*`,
+        contextInfo: getContextInfo(sender, config)
+});
+
 } catch {
       await sock.sendMessage(msg.key.remoteJid, {
-        text: '⚠️ Failed to fetch video.',
+        text: '❌ Failed to fetch song or video.',
         contextInfo: getContextInfo(sender, config)
 });
 }
